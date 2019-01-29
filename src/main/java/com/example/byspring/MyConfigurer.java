@@ -15,6 +15,10 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * </websocket:handlers>
  * <bean id="myTextHandler" class="com.example.byspring.MyTextHandler"/>
  * 
+ * 另外在根标签属性中加上:
+ * xmlns:websocket="http://www.springframework.org/schema/websocket"
+ * http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd
+ * 
  * @author Administrator
  *
  */
