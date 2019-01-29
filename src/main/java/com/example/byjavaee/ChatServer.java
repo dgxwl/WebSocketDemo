@@ -2,7 +2,7 @@ package com.example.byjavaee;
 
 import java.io.IOException;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 import javax.websocket.CloseReason;
 import javax.websocket.EndpointConfig;
@@ -24,7 +24,7 @@ public class ChatServer {
 	/*
 	 * 存储已建立的连接会话
 	 */
-	private static Queue<Session> allConnections = new ArrayBlockingQueue<>(10);
+	private static Queue<Session> allConnections = new LinkedBlockingDeque<>(10);
 	
 	/**
 	 * @@OnOpen注解声明连接建立事件

@@ -1,7 +1,7 @@
 package com.example.byspring;
 
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.WebSocketHandler;
@@ -17,7 +17,7 @@ import org.springframework.web.socket.WebSocketSession;
  */
 public class MyTextHandler implements WebSocketHandler {
 	
-	private static Queue<WebSocketSession> allConnections = new ArrayBlockingQueue<>(10);
+	private static Queue<WebSocketSession> allConnections = new LinkedBlockingQueue<>(10);
 	
 	/**
 	 * 连接建立事件
