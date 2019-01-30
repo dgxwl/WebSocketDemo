@@ -61,7 +61,7 @@
 		document.querySelector('#message').value = '';
 	}
 	
-	function closeConnection() {
+	window.onbeforeunload = function() {
 		//close() 关闭连接
 		websocket.close();
 	}
