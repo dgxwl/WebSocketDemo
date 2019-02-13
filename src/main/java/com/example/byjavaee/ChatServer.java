@@ -11,6 +11,7 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.Session;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
 /**
@@ -19,7 +20,7 @@ import javax.websocket.server.ServerEndpoint;
  * @author Administrator
  *
  */
-@ServerEndpoint("/javaee/chat")
+@ServerEndpoint("/javaee/chat/{param}")  //可使用{}定义参数化url访问websocket, 在各事件方法中可获取到参数
 public class ChatServer {
 	/*
 	 * 存储已建立的连接会话
@@ -29,11 +30,13 @@ public class ChatServer {
 	/**
 	 * @@OnOpen注解声明连接建立事件
 	 * 可选参数:
+	 * param 通过@PathParam("param")可获取@ServerEndpoint中声明的url参数
 	 * session javax.websocket.Session 服务端与客户端的连接会话
-	 * config
+	 * config websocket服务端的配置对象
 	 */
 	@OnOpen
-	public void onOpen(Session session, EndpointConfig config) {
+	public void onOpen(@PathParam("param") String param, Session session, EndpointConfig config) {
+		System.out.println("客户端传参: " + param);
 		allConnections.add(session);
 		System.out.println(config.getUserProperties());
 		

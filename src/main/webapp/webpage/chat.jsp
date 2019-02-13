@@ -21,7 +21,8 @@
 		//判断浏览器是否支持websocket
 		if ('WebSocket' in window) {
 			//websocket是一项新的基于TCP的长连接通信协议, 地址以ws或wss开头, 端口80或443
-			websocket = new WebSocket('ws://localhost:8080/javaee/chat');
+			//以绝对路径访问, 如果有应用名必须加上
+			websocket = new WebSocket('ws://localhost:8080/javaee/chat/IAMPARAM');
 // 			websocket = new WebSocket('ws://localhost:8080/spring/chat');
 		} else {
 			container.innerHTML('当前浏览器不支持websocket');
@@ -61,8 +62,12 @@
 		document.querySelector('#message').value = '';
 	}
 	
-	window.onbeforeunload = function() {
+	function closeConnection() {
 		//close() 关闭连接
+		websocket.close();
+	}
+	
+	window.onbeforeunload = function() {
 		websocket.close();
 	}
 </script>
