@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
+import org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean;
 
 /**
  * 使用注解配置websocket.
@@ -32,11 +33,25 @@ public class MyConfigurer implements WebSocketConfigurer {
 		 * addHandler(WebSocketHandler webSocketHandler, String... paths)
 		 * 声明websocket服务端及其访问url
 		 */
-		registry.addHandler(myTextHandler(), "/spring/chat");
+		registry.addHandler(chatHandler(), "/spring/chat");
 	}
 
 	@Bean  //方法级别的注解, 用于@Configuration类中, 等同于在xml配置中声明bean
-	public MyTextHandler myTextHandler() {
-		return new MyTextHandler();
+	public ChatHandler chatHandler() {
+		return new ChatHandler();
+	}
+	
+	/*
+	 * 配置可接收的文本和二进制内容大小限制
+	 * 如果没有配置,很容易超出范围,将会断线:
+	 * close code: 1009
+	 * close reason: No async message support and buffer too small. Buffer size: [8,192], Message size: [117,617]
+	 */
+	@Bean
+	public ServletServerContainerFactoryBean createWebSocketContainer() {
+	    ServletServerContainerFactoryBean container = new ServletServerContainerFactoryBean();
+	    container.setMaxTextMessageBufferSize(51200);
+	    container.setMaxBinaryMessageBufferSize(104857600);
+	    return container;
 	}
 }

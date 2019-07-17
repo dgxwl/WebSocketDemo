@@ -3,10 +3,11 @@ package com.example.byspring;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import org.springframework.web.socket.BinaryMessage;
 import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.WebSocketMessage;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.AbstractWebSocketHandler;
 
 /**
  * 使用Spring实现websocket服务端;
@@ -15,7 +16,7 @@ import org.springframework.web.socket.WebSocketSession;
  * @author Administrator
  *
  */
-public class MyTextHandler implements WebSocketHandler {
+public class ChatHandler extends AbstractWebSocketHandler {
 	
 	private static Queue<WebSocketSession> allConnections = new LinkedBlockingQueue<>(10);
 	
@@ -37,10 +38,21 @@ public class MyTextHandler implements WebSocketHandler {
 	}
 	
 	/**
-	 * 接收消息事件
+	 * 接收文本消息事件
 	 */
 	@Override
-	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+	public void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+		//群发
+		for (WebSocketSession se : allConnections) {
+			se.sendMessage(message);
+		}
+	}
+	
+	/**
+	 * 接收二进制消息事件
+	 */
+	@Override
+	protected void handleBinaryMessage(WebSocketSession session, BinaryMessage message) throws Exception {
 		//群发
 		for (WebSocketSession se : allConnections) {
 			se.sendMessage(message);
@@ -54,7 +66,7 @@ public class MyTextHandler implements WebSocketHandler {
 	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
 		allConnections.remove(session);
 		System.out.println("close code: " + closeStatus.getCode());
-		System.out.println("close reson: " + closeStatus.getReason());
+		System.out.println("close reason: " + closeStatus.getReason());
 		
 		System.out.println("一个客户端下线, 当前在线: " + allConnections.size());
 	}

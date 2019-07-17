@@ -22,8 +22,9 @@ import javax.websocket.server.ServerEndpoint;
  */
 @ServerEndpoint("/javaee/chat/{param}")  //可使用{}定义参数化url访问websocket, 在各事件方法中可获取到参数
 public class ChatServer {
+	
 	/*
-	 * 存储已建立的连接会话
+	 * 存储已建立的连接会话;所有实例共享,需要使用线程安全的集合
 	 */
 	private static Queue<Session> allConnections = new LinkedBlockingDeque<>(10);
 	
